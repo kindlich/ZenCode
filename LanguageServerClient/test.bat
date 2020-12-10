@@ -1,0 +1,1 @@
+java -jar "C:\Dev\Tweakers\ContentTweaker 1.16\CraftTweaker\ZenCode\LanguageServerClient\build\libs\LanguageServerClient-0.3.8.jar"

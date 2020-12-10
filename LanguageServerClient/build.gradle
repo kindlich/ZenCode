@@ -1,0 +1,19 @@
+if (!hasProperty('mainClass')) {
+	ext.mainClass = 'org.openzen.zenscript.lsp.client.StdioClient'
+}
+
+jar {
+	manifest {
+		attributes([
+				"Specification-Title"     : "zencodelang",
+				"Specification-Vendor"    : "ZenCodeLang",
+				"Specification-Version"   : "1",
+				"Implementation-Title"    : project.name,
+				"Implementation-Version"  : "${version}",
+				"Implementation-Vendor"   : "ZenCodeLang",
+				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				"Class-Path": ".",
+				"Main-Class": "org.openzen.zenscript.lsp.client.StdioClient"
+		])
+	}
+}
