@@ -39,7 +39,7 @@ public class Main {
 
 		scriptingEngine.registerNativeProvided(example);
 
-		File inputDirectory = new File("ScriptingExample/scripts");
+		File inputDirectory = new File("scripts");
 		final SourceFile[] sourceFiles = Files.walk(inputDirectory.getAbsoluteFile().toPath())
 				.map(Path::toFile)
 				.filter(File::isFile)
