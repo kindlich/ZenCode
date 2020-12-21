@@ -30,6 +30,7 @@ public class OpenzenLSPServer implements LanguageServer, LanguageClientAware {
 			serverCapabilities.setCompletionProvider(new CompletionOptions());
 			serverCapabilities.setSemanticTokensProvider(semanticTokenProvider.getOptions());
 			serverCapabilities.setDocumentHighlightProvider(true);
+			serverCapabilities.setDefinitionProvider(true);
 			final ServerInfo serverInfo = new ServerInfo("ZenCode LSP", "0.0.0");
 
 			return new InitializeResult(serverCapabilities, serverInfo);

@@ -4,7 +4,6 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.openzen.zencode.shared.LiteralSourceFile;
-import org.openzen.zencode.shared.VirtualSourceFile;
 import org.openzen.zenscript.codemodel.Module;
 import org.openzen.zenscript.codemodel.context.CompilingPackage;
 import org.openzen.zenscript.codemodel.definition.ZSPackage;
@@ -14,10 +13,7 @@ import org.openzen.zenscript.lsp.server.semantictokens.LSPSemanticTokenProvider;
 import org.openzen.zenscript.parser.ParsedFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class OpenzenTextDocumentService implements TextDocumentService {
@@ -84,11 +80,24 @@ public class OpenzenTextDocumentService implements TextDocumentService {
 			final List<DocumentHighlight> result = new ArrayList<>();
 			{
 				final Position start = params.getPosition();
-				final Position end = new Position(start.getLine(), start.getCharacter() + 3);
+				final Position end = new Position(start.getLine(), start.getCharacter() + 5);
 				final DocumentHighlight documentHighlight = new DocumentHighlight(new Range(start, end), DocumentHighlightKind.Write);
 				result.add(documentHighlight);
 			}
 			return result;
+		});
+	}
+
+	@Override
+	public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
+		return CompletableFuture.supplyAsync(() -> {
+			final String uri = params.getTextDocument().getUri();
+			final Position start = new Position(1, 1);
+			final Position end = new Position(1, 5);
+			final Range range = new Range(start, end);
+			final Location location = new Location(uri, range);
+
+			return Either.forLeft(Collections.singletonList(location));
 		});
 	}
 }
