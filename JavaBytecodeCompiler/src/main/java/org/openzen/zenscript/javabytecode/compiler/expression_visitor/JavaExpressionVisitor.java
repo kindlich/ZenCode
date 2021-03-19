@@ -1,4 +1,4 @@
-package org.openzen.zenscript.javabytecode.compiler;
+package org.openzen.zenscript.javabytecode.compiler.expression_visitor;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
@@ -19,6 +19,7 @@ import org.openzen.zenscript.codemodel.type.*;
 import org.openzen.zenscript.codemodel.type.member.BuiltinID;
 import org.openzen.zenscript.javabytecode.JavaBytecodeContext;
 import org.openzen.zenscript.javabytecode.JavaLocalVariableInfo;
+import org.openzen.zenscript.javabytecode.compiler.*;
 import org.openzen.zenscript.javabytecode.compiler.JavaModificationExpressionVisitor.PushOption;
 import org.openzen.zenscript.javashared.*;
 import org.openzen.zenscript.javashared.expressions.JavaFunctionInterfaceCastExpression;
@@ -31,9 +32,9 @@ import java.util.stream.Collectors;
 
 public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativeTranslator<Void> {
 
-	final JavaWriter javaWriter;
-	final JavaBytecodeContext context;
-	final JavaCompiledModule module;
+	public final JavaWriter javaWriter;
+	public final JavaBytecodeContext context;
+	public final JavaCompiledModule module;
 	private final JavaBoxingTypeVisitor boxingTypeVisitor;
 	private final JavaUnboxingTypeVisitor unboxingTypeVisitor;
 	private final JavaCapturedExpressionVisitor capturedExpressionVisitor = new JavaCapturedExpressionVisitor(this);

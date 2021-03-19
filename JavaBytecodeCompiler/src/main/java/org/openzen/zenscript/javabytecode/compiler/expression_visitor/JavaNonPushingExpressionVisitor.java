@@ -3,18 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.openzen.zenscript.javabytecode.compiler;
+package org.openzen.zenscript.javabytecode.compiler.expression_visitor;
 
 import org.objectweb.asm.Label;
-import org.openzen.zenscript.codemodel.FunctionHeader;
 import org.openzen.zenscript.codemodel.expression.*;
 import org.openzen.zenscript.codemodel.generic.TypeParameter;
 import org.openzen.zenscript.codemodel.type.BasicTypeID;
-import org.openzen.zenscript.codemodel.type.TypeID;
 import org.openzen.zenscript.codemodel.type.member.BuiltinID;
 import org.openzen.zenscript.javabytecode.JavaBytecodeContext;
 import org.openzen.zenscript.javabytecode.JavaLocalVariableInfo;
+import org.openzen.zenscript.javabytecode.compiler.CompilerUtils;
+import org.openzen.zenscript.javabytecode.compiler.JavaModificationExpressionVisitor;
 import org.openzen.zenscript.javabytecode.compiler.JavaModificationExpressionVisitor.PushOption;
+import org.openzen.zenscript.javabytecode.compiler.JavaWriter;
+import org.openzen.zenscript.javabytecode.compiler.expression_visitor.JavaExpressionVisitor;
 import org.openzen.zenscript.javashared.JavaCompiledModule;
 import org.openzen.zenscript.javashared.JavaParameterInfo;
 import org.openzen.zenscript.javashared.expressions.JavaFunctionInterfaceCastExpression;

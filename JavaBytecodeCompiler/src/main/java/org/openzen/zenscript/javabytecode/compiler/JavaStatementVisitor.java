@@ -7,6 +7,8 @@ import org.openzen.zenscript.codemodel.type.BasicTypeID;
 import org.openzen.zenscript.codemodel.type.RangeTypeID;
 import org.openzen.zenscript.javabytecode.JavaBytecodeContext;
 import org.openzen.zenscript.javabytecode.JavaLocalVariableInfo;
+import org.openzen.zenscript.javabytecode.compiler.expression_visitor.JavaExpressionVisitor;
+import org.openzen.zenscript.javabytecode.compiler.expression_visitor.JavaNonPushingExpressionVisitor;
 import org.openzen.zenscript.javashared.JavaCompiledModule;
 
 import java.util.Arrays;
