@@ -30,130 +30,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativeTranslator<Void> {
-	public static final JavaMethod OBJECT_HASHCODE = JavaMethod.getNativeVirtual(JavaClass.OBJECT, "hashCode", "()I");
-	public static final JavaMethod OBJECT_EQUALS = JavaMethod.getNativeVirtual(JavaClass.OBJECT, "equals", "(Ljava/lang/Object)Z");
-	private static final JavaMethod OBJECTS_TOSTRING = JavaMethod.getNativeStatic(new JavaClass("java.util", "Objects", JavaClass.Kind.CLASS), "toString", "(Ljava/lang/Object;)Ljava/lang/String;");
-	private static final JavaMethod BOOLEAN_PARSE = JavaMethod.getNativeStatic(JavaClass.BOOLEAN, "parseBoolean", "(Ljava/lang/String;)Z");
-	private static final JavaMethod BOOLEAN_TO_STRING = JavaMethod.getNativeStatic(JavaClass.BOOLEAN, "toString", "(Z)Ljava/lang/String;");
-	private static final JavaMethod BYTE_PARSE = JavaMethod.getNativeStatic(JavaClass.BYTE, "parseByte", "(Ljava/lang/String;)B");
-	private static final JavaMethod BYTE_PARSE_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.BYTE, "parseByte", "(Ljava/lang/String;I)B");
-	private static final JavaField BYTE_MIN_VALUE = new JavaField(JavaClass.BYTE, "MIN_VALUE", "B");
-	private static final JavaField BYTE_MAX_VALUE = new JavaField(JavaClass.BYTE, "MAX_VALUE", "B");
-	private static final JavaMethod BYTE_TO_STRING = JavaMethod.getNativeStatic(JavaClass.BYTE, "toString", "(B)Ljava/lang/String;");
-	private static final JavaMethod SHORT_PARSE = JavaMethod.getNativeStatic(JavaClass.SHORT, "parseShort", "(Ljava/lang/String;)S");
-	private static final JavaMethod SHORT_PARSE_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.SHORT, "parseShort", "(Ljava/lang/String;I)S");
-	private static final JavaField SHORT_MIN_VALUE = new JavaField(JavaClass.SHORT, "MIN_VALUE", "S");
-	private static final JavaField SHORT_MAX_VALUE = new JavaField(JavaClass.SHORT, "MAX_VALUE", "S");
-	private static final JavaMethod SHORT_TO_STRING = JavaMethod.getNativeStatic(JavaClass.SHORT, "toString", "(S)Ljava/lang/String;");
-	private static final JavaMethod INTEGER_COMPARE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.INTEGER, "compareUnsigned", "(II)I");
-	private static final JavaMethod INTEGER_DIVIDE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.INTEGER, "divideUnsigned", "(II)I");
-	private static final JavaMethod INTEGER_REMAINDER_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.INTEGER, "remainderUnsigned", "(II)I");
-	private static final JavaMethod INTEGER_NUMBER_OF_TRAILING_ZEROS = JavaMethod.getNativeStatic(JavaClass.INTEGER, "numberOfTrailingZeros", "(I)I");
-	private static final JavaMethod INTEGER_NUMBER_OF_LEADING_ZEROS = JavaMethod.getNativeStatic(JavaClass.INTEGER, "numberOfLeadingZeros", "(I)I");
-	private static final JavaMethod INTEGER_PARSE = JavaMethod.getNativeStatic(JavaClass.INTEGER, "parseInt", "(Ljava/lang/String;)I");
-	private static final JavaMethod INTEGER_PARSE_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.INTEGER, "parseInt", "(Ljava/lang/String;I)I");
-	private static final JavaMethod INTEGER_PARSE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.INTEGER, "parseUnsignedInt", "(Ljava/lang/String;)I");
-	private static final JavaMethod INTEGER_PARSE_UNSIGNED_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.INTEGER, "parseUnsignedInt", "(Ljava/lang/String;I)I");
-	private static final JavaMethod INTEGER_HIGHEST_ONE_BIT = JavaMethod.getNativeStatic(JavaClass.INTEGER, "highestOneBit", "(I)I");
-	private static final JavaMethod INTEGER_LOWEST_ONE_BIT = JavaMethod.getNativeStatic(JavaClass.INTEGER, "lowestOneBit", "(I)I");
-	private static final JavaMethod INTEGER_BIT_COUNT = JavaMethod.getNativeStatic(JavaClass.INTEGER, "bitCount", "(I)I");
-	private static final JavaField INTEGER_MIN_VALUE = new JavaField(JavaClass.INTEGER, "MIN_VALUE", "I");
-	private static final JavaField INTEGER_MAX_VALUE = new JavaField(JavaClass.INTEGER, "MAX_VALUE", "I");
-	private static final JavaMethod INTEGER_TO_STRING = JavaMethod.getNativeStatic(JavaClass.INTEGER, "toString", "(I)Ljava/lang/String;");
-	private static final JavaMethod INTEGER_TO_UNSIGNED_STRING = JavaMethod.getNativeStatic(JavaClass.INTEGER, "toUnsignedString", "(I)Ljava/lang/String;");
-	private static final JavaMethod LONG_COMPARE = JavaMethod.getNativeStatic(JavaClass.LONG, "compare", "(JJ)I");
-	private static final JavaMethod LONG_COMPARE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.LONG, "compareUnsigned", "(JJ)I");
-	private static final JavaMethod LONG_DIVIDE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.LONG, "divideUnsigned", "(JJ)J");
-	private static final JavaMethod LONG_REMAINDER_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.LONG, "remainderUnsigned", "(JJ)J");
-	private static final JavaMethod LONG_NUMBER_OF_TRAILING_ZEROS = JavaMethod.getNativeStatic(JavaClass.LONG, "numberOfTrailingZeros", "(J)I");
-	private static final JavaMethod LONG_NUMBER_OF_LEADING_ZEROS = JavaMethod.getNativeStatic(JavaClass.LONG, "numberOfLeadingZeros", "(J)I");
-	private static final JavaMethod LONG_PARSE = JavaMethod.getNativeStatic(JavaClass.LONG, "parseLong", "(Ljava/lang/String;)J");
-	private static final JavaMethod LONG_PARSE_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.LONG, "parseLong", "(Ljava/lang/String;I)J");
-	private static final JavaMethod LONG_PARSE_UNSIGNED = JavaMethod.getNativeStatic(JavaClass.LONG, "parseUnsignedLong", "(Ljava/lang/String;)J");
-	private static final JavaMethod LONG_PARSE_UNSIGNED_WITH_BASE = JavaMethod.getNativeStatic(JavaClass.LONG, "parseUnsignedLong", "(Ljava/lang/String;I)J");
-	private static final JavaMethod LONG_HIGHEST_ONE_BIT = JavaMethod.getNativeStatic(JavaClass.LONG, "highestOneBit", "(J)J");
-	private static final JavaMethod LONG_LOWEST_ONE_BIT = JavaMethod.getNativeStatic(JavaClass.LONG, "lowestOneBit", "(J)J");
-	private static final JavaMethod LONG_BIT_COUNT = JavaMethod.getNativeStatic(JavaClass.LONG, "bitCount", "(J)I");
-	private static final JavaField LONG_MIN_VALUE = new JavaField(JavaClass.LONG, "MIN_VALUE", "J");
-	private static final JavaField LONG_MAX_VALUE = new JavaField(JavaClass.LONG, "MAX_VALUE", "J");
-	private static final JavaMethod LONG_TO_STRING = JavaMethod.getNativeStatic(JavaClass.LONG, "toString", "(J)Ljava/lang/String;");
-	private static final JavaMethod LONG_TO_UNSIGNED_STRING = JavaMethod.getNativeStatic(JavaClass.LONG, "toUnsignedString", "(J)Ljava/lang/String;");
-	private static final JavaMethod FLOAT_COMPARE = JavaMethod.getNativeStatic(JavaClass.FLOAT, "compare", "(FF)I");
-	private static final JavaMethod FLOAT_PARSE = JavaMethod.getNativeStatic(JavaClass.FLOAT, "parseFloat", "(Ljava/lang/String;)F");
-	private static final JavaMethod FLOAT_FROM_BITS = JavaMethod.getNativeStatic(JavaClass.FLOAT, "intBitsToFloat", "(I)F");
-	private static final JavaMethod FLOAT_BITS = JavaMethod.getNativeStatic(JavaClass.FLOAT, "floatToRawIntBits", "(F)I");
-	private static final JavaField FLOAT_MIN_VALUE = new JavaField(JavaClass.FLOAT, "MIN_VALUE", "F");
-	private static final JavaField FLOAT_MAX_VALUE = new JavaField(JavaClass.FLOAT, "MAX_VALUE", "F");
-	private static final JavaMethod FLOAT_TO_STRING = JavaMethod.getNativeStatic(JavaClass.FLOAT, "toString", "(F)Ljava/lang/String;");
-	private static final JavaMethod DOUBLE_COMPARE = JavaMethod.getNativeStatic(JavaClass.DOUBLE, "compare", "(DD)I");
-	private static final JavaMethod DOUBLE_PARSE = JavaMethod.getNativeStatic(JavaClass.DOUBLE, "parseDouble", "(Ljava/lang/String;)D");
-	private static final JavaMethod DOUBLE_FROM_BITS = JavaMethod.getNativeStatic(JavaClass.DOUBLE, "longBitsToDouble", "(J)D");
-	private static final JavaMethod DOUBLE_BITS = JavaMethod.getNativeStatic(JavaClass.DOUBLE, "doubleToRawLongBits", "(D)J");
-	private static final JavaField DOUBLE_MIN_VALUE = new JavaField(JavaClass.DOUBLE, "MIN_VALUE", "D");
-	private static final JavaField DOUBLE_MAX_VALUE = new JavaField(JavaClass.DOUBLE, "MAX_VALUE", "D");
-	private static final JavaMethod DOUBLE_TO_STRING = JavaMethod.getNativeStatic(JavaClass.DOUBLE, "toString", "(D)Ljava/lang/String;");
-	private static final JavaMethod CHARACTER_TO_LOWER_CASE = JavaMethod.getNativeVirtual(JavaClass.CHARACTER, "toLowerCase", "()C");
-	private static final JavaMethod CHARACTER_TO_UPPER_CASE = JavaMethod.getNativeVirtual(JavaClass.CHARACTER, "toUpperCase", "()C");
-	private static final JavaField CHARACTER_MIN_VALUE = new JavaField(JavaClass.CHARACTER, "MIN_VALUE", "C");
-	private static final JavaField CHARACTER_MAX_VALUE = new JavaField(JavaClass.CHARACTER, "MAX_VALUE", "C");
-	private static final JavaMethod CHARACTER_TO_STRING = JavaMethod.getNativeStatic(JavaClass.CHARACTER, "toString", "(C)Ljava/lang/String;");
-	private static final JavaMethod STRING_INIT_CHARACTERS = JavaMethod.getNativeConstructor(JavaClass.STRING, "([C)V");
-	private static final JavaMethod STRING_COMPARETO = JavaMethod.getNativeVirtual(JavaClass.STRING, "compareTo", "(Ljava/lang/String;)I");
-	private static final JavaMethod STRING_CONCAT = JavaMethod.getNativeVirtual(JavaClass.STRING, "concat", "(Ljava/lang/String;)Ljava/lang/String;");
-	private static final JavaMethod STRING_CHAR_AT = JavaMethod.getNativeVirtual(JavaClass.STRING, "charAt", "(I)C");
-	private static final JavaMethod STRING_SUBSTRING = JavaMethod.getNativeVirtual(JavaClass.STRING, "substring", "(II)Ljava/lang/String;");
-	private static final JavaMethod STRING_TRIM = JavaMethod.getNativeVirtual(JavaClass.STRING, "trim", "()Ljava/lang/String;");
-	private static final JavaMethod STRING_TO_LOWER_CASE = JavaMethod.getNativeVirtual(JavaClass.STRING, "toLowerCase", "()Ljava/lang/String;");
-	private static final JavaMethod STRING_TO_UPPER_CASE = JavaMethod.getNativeVirtual(JavaClass.STRING, "toUpperCase", "()Ljava/lang/String;");
-	private static final JavaMethod STRING_LENGTH = JavaMethod.getNativeVirtual(JavaClass.STRING, "length", "()I");
-	private static final JavaMethod STRING_CHARACTERS = JavaMethod.getNativeVirtual(JavaClass.STRING, "toCharArray", "()[C");
-	private static final JavaMethod STRING_ISEMPTY = JavaMethod.getNativeVirtual(JavaClass.STRING, "isEmpty", "()Z");
-	private static final JavaMethod ENUM_COMPARETO = JavaMethod.getNativeVirtual(JavaClass.ENUM, "compareTo", "(Ljava/lang/Enum;)I");
-	private static final JavaMethod ENUM_NAME = JavaMethod.getNativeVirtual(JavaClass.ENUM, "name", "()Ljava/lang/String;");
-	private static final JavaMethod ENUM_ORDINAL = JavaMethod.getNativeVirtual(JavaClass.ENUM, "ordinal", "()I");
-	private static final JavaMethod HASHMAP_INIT = JavaMethod.getNativeConstructor(JavaClass.HASHMAP, "()V");
-	private static final JavaMethod MAP_GET = JavaMethod.getInterface(JavaClass.MAP, "get", "(Ljava/lang/Object;)Ljava/lang/Object;");
-	private static final JavaMethod MAP_PUT = JavaMethod.getInterface(JavaClass.MAP, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
-	private static final JavaMethod MAP_PUT_ALL = JavaMethod.getInterface(JavaClass.MAP, "putAll", "(Ljava/util/Map;)V");
-	private static final JavaMethod MAP_CONTAINS_KEY = JavaMethod.getInterface(JavaClass.MAP, "containsKey", "(Ljava/lang/Object;)Z");
-	private static final JavaMethod MAP_SIZE = JavaMethod.getInterface(JavaClass.MAP, "size", "()I");
-	private static final JavaMethod MAP_ISEMPTY = JavaMethod.getInterface(JavaClass.MAP, "isEmpty", "()Z");
-	private static final JavaMethod MAP_KEYS = JavaMethod.getInterface(JavaClass.MAP, "keys", "()Ljava/lang/Object;");
-	private static final JavaMethod MAP_VALUES = JavaMethod.getInterface(JavaClass.MAP, "values", "()Ljava/lang/Object;");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_OBJECTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([Ljava/lang/Object;II)[Ljava/lang/Object;");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_BOOLS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([ZII)[Z");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_BYTES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([BII)[B");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_SHORTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([SII)[S");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_INTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([III)[I");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_LONGS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([JII)[J");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_FLOATS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([FII)[F");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_DOUBLES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([DII)[D");
-	private static final JavaMethod ARRAYS_COPY_OF_RANGE_CHARS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "copyOfRange", "([CII)[C");
-	private static final JavaMethod ARRAYS_EQUALS_OBJECTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([Ljava/lang/Object[Ljava/lang/Object)Z");
-	private static final JavaMethod ARRAYS_EQUALS_BOOLS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([Z[Z)Z");
-	private static final JavaMethod ARRAYS_EQUALS_BYTES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([B[B)Z");
-	private static final JavaMethod ARRAYS_EQUALS_SHORTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([S[S)Z");
-	private static final JavaMethod ARRAYS_EQUALS_INTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([I[I)Z");
-	private static final JavaMethod ARRAYS_EQUALS_LONGS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([L[L)Z");
-	private static final JavaMethod ARRAYS_EQUALS_FLOATS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([F[F)Z");
-	private static final JavaMethod ARRAYS_EQUALS_DOUBLES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([D[D)Z");
-	private static final JavaMethod ARRAYS_EQUALS_CHARS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "equals", "([C[C)Z");
-	private static final JavaMethod ARRAYS_DEEPHASHCODE = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "deepHashCode", "([Ljava/lang/Object;)");
-	private static final JavaMethod ARRAYS_HASHCODE_BOOLS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([Z)I");
-	private static final JavaMethod ARRAYS_HASHCODE_BYTES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([B)I");
-	private static final JavaMethod ARRAYS_HASHCODE_SHORTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([S)I");
-	private static final JavaMethod ARRAYS_HASHCODE_INTS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([I)I");
-	private static final JavaMethod ARRAYS_HASHCODE_LONGS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([L)I");
-	private static final JavaMethod ARRAYS_HASHCODE_FLOATS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([F)I");
-	private static final JavaMethod ARRAYS_HASHCODE_DOUBLES = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([D)I");
-	private static final JavaMethod ARRAYS_HASHCODE_CHARS = JavaMethod.getNativeStatic(JavaClass.ARRAYS, "hashCode", "([C)I");
-	private static final JavaMethod COLLECTION_SIZE = JavaMethod.getNativeVirtual(JavaClass.COLLECTION, "size", "()I");
-	private static final JavaMethod COLLECTION_TOARRAY = JavaMethod.getNativeVirtual(JavaClass.COLLECTION, "toArray", "([Ljava/lang/Object;)[Ljava/lang/Object;");
-
-	private static final JavaMethod SHARED_INIT = JavaMethod.getConstructor(JavaClass.SHARED, "(Ljava/lang/Object;)V", Modifier.PUBLIC);
-	private static final JavaMethod SHARED_GET = JavaMethod.getNativeVirtual(JavaClass.SHARED, "get", "()Ljava/lang/Object;");
-	private static final JavaMethod SHARED_ADDREF = JavaMethod.getNativeVirtual(JavaClass.SHARED, "addRef", "()V");
-	private static final JavaMethod SHARED_RELEASE = JavaMethod.getNativeVirtual(JavaClass.SHARED, "release", "()V");
 
 	final JavaWriter javaWriter;
 	final JavaBytecodeContext context;
@@ -273,19 +149,19 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				case USIZE_COMPARE_UINT:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeStatic(INTEGER_COMPARE_UNSIGNED);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_COMPARE_UNSIGNED);
 					compareGeneric(expression.comparison);
 					break;
 				case LONG_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeStatic(LONG_COMPARE);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE);
 					compareGeneric(expression.comparison);
 					break;
 				case ULONG_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeStatic(LONG_COMPARE_UNSIGNED);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
 					compareGeneric(expression.comparison);
 					break;
 				case ULONG_COMPARE_UINT:
@@ -294,38 +170,38 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 					javaWriter.i2l();
 					javaWriter.constant(0xFFFF_FFFFL);
 					javaWriter.lAnd();
-					javaWriter.invokeStatic(LONG_COMPARE_UNSIGNED);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
 					compareGeneric(expression.comparison);
 					break;
 				case ULONG_COMPARE_USIZE:
 					expression.left.accept(this);
 					expression.right.accept(this);
 					javaWriter.i2l();
-					javaWriter.invokeStatic(LONG_COMPARE_UNSIGNED);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
 					compareGeneric(expression.comparison);
 					break;
 				case FLOAT_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeStatic(FLOAT_COMPARE);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_COMPARE);
 					compareGeneric(expression.comparison);
 					break;
 				case DOUBLE_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeStatic(DOUBLE_COMPARE);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_COMPARE);
 					compareGeneric(expression.comparison);
 					break;
 				case STRING_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeVirtual(STRING_COMPARETO);
+					javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_COMPARETO);
 					compareGeneric(expression.comparison);
 					break;
 				case ENUM_COMPARE:
 					expression.left.accept(this);
 					expression.right.accept(this);
-					javaWriter.invokeVirtual(ENUM_COMPARETO);
+					javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.ENUM_COMPARETO);
 					compareGeneric(expression.comparison);
 					break;
 				default:
@@ -666,12 +542,12 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			case BYTE_DIV_BYTE:
 			case USHORT_DIV_USHORT:
 			case UINT_DIV_UINT:
-				javaWriter.invokeStatic(INTEGER_DIVIDE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_DIVIDE_UNSIGNED);
 				break;
 			case BYTE_MOD_BYTE:
 			case USHORT_MOD_USHORT:
 			case UINT_MOD_UINT:
-				javaWriter.invokeStatic(INTEGER_REMAINDER_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_REMAINDER_UNSIGNED);
 				break;
 			case BYTE_AND_BYTE:
 			case SBYTE_AND_SBYTE:
@@ -726,24 +602,24 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			case INT_COUNT_LOW_ZEROES:
 			case UINT_COUNT_LOW_ZEROES:
 			case USIZE_COUNT_LOW_ZEROES:
-				javaWriter.invokeStatic(INTEGER_NUMBER_OF_TRAILING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_NUMBER_OF_TRAILING_ZEROS);
 				break;
 			case INT_COUNT_HIGH_ZEROES:
 			case UINT_COUNT_HIGH_ZEROES:
 			case USIZE_COUNT_HIGH_ZEROES:
-				javaWriter.invokeStatic(INTEGER_NUMBER_OF_LEADING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_NUMBER_OF_LEADING_ZEROS);
 				break;
 			case INT_COUNT_LOW_ONES:
 			case UINT_COUNT_LOW_ONES:
 			case USIZE_COUNT_LOW_ONES:
 				javaWriter.iNot();
-				javaWriter.invokeStatic(INTEGER_NUMBER_OF_TRAILING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_NUMBER_OF_TRAILING_ZEROS);
 				break;
 			case INT_COUNT_HIGH_ONES:
 			case UINT_COUNT_HIGH_ONES:
 			case USIZE_COUNT_HIGH_ONES:
 				javaWriter.iNot();
-				javaWriter.invokeStatic(INTEGER_NUMBER_OF_LEADING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_NUMBER_OF_LEADING_ZEROS);
 				break;
 			case LONG_NOT:
 			case ULONG_NOT:
@@ -795,27 +671,27 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case LONG_COUNT_LOW_ZEROES:
 			case ULONG_COUNT_LOW_ZEROES:
-				javaWriter.invokeStatic(LONG_NUMBER_OF_TRAILING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_NUMBER_OF_TRAILING_ZEROS);
 				break;
 			case LONG_COUNT_HIGH_ZEROES:
 			case ULONG_COUNT_HIGH_ZEROES:
-				javaWriter.invokeStatic(LONG_NUMBER_OF_LEADING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_NUMBER_OF_LEADING_ZEROS);
 				break;
 			case LONG_COUNT_LOW_ONES:
 			case ULONG_COUNT_LOW_ONES:
 				javaWriter.lNot();
-				javaWriter.invokeStatic(LONG_NUMBER_OF_TRAILING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_NUMBER_OF_TRAILING_ZEROS);
 				break;
 			case LONG_COUNT_HIGH_ONES:
 			case ULONG_COUNT_HIGH_ONES:
 				javaWriter.lNot();
-				javaWriter.invokeStatic(LONG_NUMBER_OF_LEADING_ZEROS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_NUMBER_OF_LEADING_ZEROS);
 				break;
 			case ULONG_DIV_ULONG:
-				javaWriter.invokeStatic(LONG_DIVIDE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_DIVIDE_UNSIGNED);
 				break;
 			case ULONG_MOD_ULONG:
-				javaWriter.invokeStatic(LONG_REMAINDER_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_REMAINDER_UNSIGNED);
 				break;
 			case FLOAT_NEG:
 				javaWriter.fNeg();
@@ -863,16 +739,16 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			case CHAR_REMOVE_DIACRITICS:
 				throw new UnsupportedOperationException("Not yet supported!");
 			case CHAR_TO_LOWER_CASE:
-				javaWriter.invokeStatic(CHARACTER_TO_LOWER_CASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.CHARACTER_TO_LOWER_CASE);
 				break;
 			case CHAR_TO_UPPER_CASE:
-				javaWriter.invokeStatic(CHARACTER_TO_UPPER_CASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.CHARACTER_TO_UPPER_CASE);
 				break;
 			case STRING_ADD_STRING:
-				javaWriter.invokeVirtual(STRING_CONCAT);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_CONCAT);
 				break;
 			case STRING_INDEXGET:
-				javaWriter.invokeVirtual(STRING_CHAR_AT);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_CHAR_AT);
 				break;
 			case STRING_RANGEGET: {
 				expression.target.accept(this);
@@ -896,25 +772,25 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 					javaWriter.loadInt(tmp);
 					javaWriter.getField(owner, "to", "I");
 				}
-				javaWriter.invokeVirtual(STRING_SUBSTRING);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_SUBSTRING);
 				break;
 			}
 			case STRING_REMOVE_DIACRITICS:
 				throw new UnsupportedOperationException("Not yet supported!");
 			case STRING_TRIM:
-				javaWriter.invokeVirtual(STRING_TRIM);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_TRIM);
 				break;
 			case STRING_TO_LOWER_CASE:
-				javaWriter.invokeVirtual(STRING_TO_LOWER_CASE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_TO_LOWER_CASE);
 				break;
 			case STRING_TO_UPPER_CASE:
-				javaWriter.invokeVirtual(STRING_TO_UPPER_CASE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_TO_UPPER_CASE);
 				break;
 			case ASSOC_INDEXGET:
 			case ASSOC_GETORDEFAULT: {
 				AssocTypeID type = (AssocTypeID) expression.target.type;
 				type.keyType.accept(type.keyType, boxingTypeVisitor);
-				javaWriter.invokeInterface(MAP_GET);
+				javaWriter.invokeInterface(JavaExpressionVisitorJavaMembers.MAP_GET);
 
 				type.valueType.accept(type.valueType, unboxingTypeVisitor);
 				if (!CompilerUtils.isPrimitive(type.valueType)) {
@@ -923,17 +799,17 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			}
 			case ASSOC_INDEXSET:
-				javaWriter.invokeVirtual(MAP_PUT);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_PUT);
 				javaWriter.pop();
 				break;
 			case ASSOC_CONTAINS:
-				javaWriter.invokeVirtual(MAP_CONTAINS_KEY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_CONTAINS_KEY);
 				break;
 			case ASSOC_EQUALS:
-				javaWriter.invokeVirtual(OBJECT_EQUALS);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_EQUALS);
 				break;
 			case ASSOC_NOTEQUALS:
-				javaWriter.invokeVirtual(OBJECT_EQUALS);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_EQUALS);
 				javaWriter.invertBoolean();
 				break;
 			case ASSOC_SAME:
@@ -961,7 +837,7 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			}
 			case GENERICMAP_GETOPTIONAL: {
-				javaWriter.invokeVirtual(MAP_GET);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_GET);
 				break;
 			}
 			case GENERICMAP_PUT: {
@@ -972,19 +848,19 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 					javaWriter.swap();
 				}
 
-				javaWriter.invokeVirtual(MAP_PUT);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_PUT);
 				javaWriter.pop();
 				break;
 			}
 			case GENERICMAP_CONTAINS:
-				javaWriter.invokeVirtual(MAP_CONTAINS_KEY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_CONTAINS_KEY);
 				break;
 			case GENERICMAP_EQUALS:
 				throw new UnsupportedOperationException("Not yet supported!");
 			case GENERICMAP_NOTEQUALS:
 				throw new UnsupportedOperationException("Not yet supported!");
 			case GENERICMAP_ADDALL:
-				javaWriter.invokeInterface(MAP_PUT_ALL);
+				javaWriter.invokeInterface(JavaExpressionVisitorJavaMembers.MAP_PUT_ALL);
 				break;
 			case ARRAY_INDEXGET: {
 				ArrayTypeID type = (ArrayTypeID) expression.target.type;
@@ -1033,38 +909,38 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				if (type.elementType instanceof BasicTypeID) {
 					switch ((BasicTypeID) type.elementType) {
 						case BOOL:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_BOOLS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_BOOLS);
 							break;
 						case BYTE:
 						case SBYTE:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_BYTES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_BYTES);
 							break;
 						case SHORT:
 						case USHORT:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_SHORTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_SHORTS);
 							break;
 						case INT:
 						case UINT:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_INTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_INTS);
 							break;
 						case LONG:
 						case ULONG:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_LONGS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_LONGS);
 							break;
 						case FLOAT:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_FLOATS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_FLOATS);
 							break;
 						case DOUBLE:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_DOUBLES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_DOUBLES);
 							break;
 						case CHAR:
-							javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_CHARS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_CHARS);
 							break;
 						default:
 							throw new IllegalArgumentException("Unknown basic type: " + type.elementType);
 					}
 				} else {
-					javaWriter.invokeStatic(ARRAYS_COPY_OF_RANGE_OBJECTS);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_COPY_OF_RANGE_OBJECTS);
 					javaWriter.checkCast(context.getInternalName(expression.target.type));
 				}
 				break;
@@ -1134,38 +1010,38 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				if (type.elementType instanceof BasicTypeID) {
 					switch ((BasicTypeID) type.elementType) {
 						case BOOL:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_BOOLS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_BOOLS);
 							break;
 						case BYTE:
 						case SBYTE:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_BYTES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_BYTES);
 							break;
 						case SHORT:
 						case USHORT:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_SHORTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_SHORTS);
 							break;
 						case INT:
 						case UINT:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_INTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_INTS);
 							break;
 						case LONG:
 						case ULONG:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_LONGS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_LONGS);
 							break;
 						case FLOAT:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_FLOATS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_FLOATS);
 							break;
 						case DOUBLE:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_DOUBLES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_DOUBLES);
 							break;
 						case CHAR:
-							javaWriter.invokeStatic(ARRAYS_EQUALS_CHARS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_CHARS);
 							break;
 						default:
 							throw new IllegalArgumentException("Unknown basic type: " + type.elementType);
 					}
 				} else {
-					javaWriter.invokeStatic(ARRAYS_EQUALS_OBJECTS);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_EQUALS_OBJECTS);
 				}
 
 				if (builtin == BuiltinID.ARRAY_NOTEQUALS) {
@@ -1240,69 +1116,69 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 
 		switch (builtin) {
 			case BOOL_PARSE:
-				javaWriter.invokeStatic(BOOLEAN_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.BOOLEAN_PARSE);
 				break;
 			case BYTE_PARSE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED);
 				break;
 			case BYTE_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED_WITH_BASE);
 				break;
 			case SBYTE_PARSE:
-				javaWriter.invokeStatic(BYTE_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.BYTE_PARSE);
 				break;
 			case SBYTE_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(BYTE_PARSE_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.BYTE_PARSE_WITH_BASE);
 				break;
 			case SHORT_PARSE:
-				javaWriter.invokeStatic(SHORT_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.SHORT_PARSE);
 				break;
 			case SHORT_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(SHORT_PARSE_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.SHORT_PARSE_WITH_BASE);
 				break;
 			case USHORT_PARSE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED);
 				break;
 			case USHORT_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED_WITH_BASE);
 				break;
 			case INT_PARSE:
-				javaWriter.invokeStatic(INTEGER_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE);
 				break;
 			case INT_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(INTEGER_PARSE_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_WITH_BASE);
 				break;
 			case UINT_PARSE:
 			case USIZE_PARSE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED);
 				break;
 			case UINT_PARSE_WITH_BASE:
 			case USIZE_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(INTEGER_PARSE_UNSIGNED_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_PARSE_UNSIGNED_WITH_BASE);
 				break;
 			case LONG_PARSE:
-				javaWriter.invokeStatic(LONG_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_PARSE);
 				break;
 			case LONG_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(LONG_PARSE_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_PARSE_WITH_BASE);
 				break;
 			case ULONG_PARSE:
-				javaWriter.invokeStatic(LONG_PARSE_UNSIGNED);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_PARSE_UNSIGNED);
 				break;
 			case ULONG_PARSE_WITH_BASE:
-				javaWriter.invokeStatic(LONG_PARSE_UNSIGNED_WITH_BASE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_PARSE_UNSIGNED_WITH_BASE);
 				break;
 			case FLOAT_FROM_BITS:
-				javaWriter.invokeStatic(FLOAT_FROM_BITS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_FROM_BITS);
 				break;
 			case FLOAT_PARSE:
-				javaWriter.invokeStatic(FLOAT_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_PARSE);
 				break;
 			case DOUBLE_FROM_BITS:
-				javaWriter.invokeStatic(DOUBLE_FROM_BITS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_FROM_BITS);
 				break;
 			case DOUBLE_PARSE:
-				javaWriter.invokeStatic(DOUBLE_PARSE);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_PARSE);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unknown builtin: " + builtin);
@@ -1386,9 +1262,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 		switch (builtin) {
 			case BOOL_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(BOOLEAN_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.BOOLEAN_TO_STRING);
 				}
 				break;
 			case BYTE_TO_SBYTE:
@@ -1428,11 +1304,11 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case BYTE_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
 					javaWriter.constant(0xFF);
 					javaWriter.iAnd();
-					javaWriter.invokeStatic(INTEGER_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_TO_STRING);
 				}
 				break;
 			case SBYTE_TO_BYTE:
@@ -1456,9 +1332,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case SBYTE_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(INTEGER_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_TO_STRING);
 				}
 				break;
 			case SHORT_TO_BYTE:
@@ -1485,9 +1361,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case SHORT_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(SHORT_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.SHORT_TO_STRING);
 				}
 				break;
 			case USHORT_TO_BYTE:
@@ -1525,11 +1401,11 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case USHORT_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
 					javaWriter.constant(0xFFFFL);
 					javaWriter.iAnd();
-					javaWriter.invokeStatic(INTEGER_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_TO_STRING);
 				}
 				break;
 			case INT_TO_BYTE:
@@ -1572,9 +1448,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			case INT_TO_STRING:
 			case USIZE_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(INTEGER_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_TO_STRING);
 				}
 				break;
 			case UINT_TO_BYTE:
@@ -1614,9 +1490,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case UINT_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(INTEGER_TO_UNSIGNED_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_TO_UNSIGNED_STRING);
 				}
 				break;
 			case LONG_TO_BYTE:
@@ -1650,9 +1526,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case LONG_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(LONG_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_TO_STRING);
 				}
 				break;
 			case ULONG_TO_BYTE:
@@ -1685,9 +1561,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case ULONG_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(LONG_TO_UNSIGNED_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_TO_UNSIGNED_STRING);
 				}
 				break;
 			case FLOAT_TO_BYTE:
@@ -1716,9 +1592,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case FLOAT_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(FLOAT_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_TO_STRING);
 				}
 				break;
 			case DOUBLE_TO_BYTE:
@@ -1747,9 +1623,9 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case DOUBLE_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(DOUBLE_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_TO_STRING);
 				}
 				break;
 			case CHAR_TO_BYTE:
@@ -1769,13 +1645,13 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				break;
 			case CHAR_TO_STRING:
 				if (expression.target.type.isOptional()) {
-					javaWriter.invokeStatic(OBJECTS_TOSTRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.OBJECTS_TOSTRING);
 				} else {
-					javaWriter.invokeStatic(CHARACTER_TO_STRING);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.CHARACTER_TO_STRING);
 				}
 				break;
 			case ENUM_TO_STRING:
-				javaWriter.invokeVirtual(ENUM_NAME);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.ENUM_NAME);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unknown builtin cast: " + builtin);
@@ -1845,16 +1721,16 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(0xFF);
 				break;
 			case SBYTE_GET_MIN_VALUE:
-				javaWriter.getStaticField(BYTE_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.BYTE_MIN_VALUE);
 				break;
 			case SBYTE_GET_MAX_VALUE:
-				javaWriter.getStaticField(BYTE_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.BYTE_MAX_VALUE);
 				break;
 			case SHORT_GET_MIN_VALUE:
-				javaWriter.getStaticField(SHORT_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.SHORT_MIN_VALUE);
 				break;
 			case SHORT_GET_MAX_VALUE:
-				javaWriter.getStaticField(SHORT_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.SHORT_MAX_VALUE);
 				break;
 			case USHORT_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -1863,10 +1739,10 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(0xFFFF);
 				break;
 			case INT_GET_MIN_VALUE:
-				javaWriter.getStaticField(INTEGER_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.INTEGER_MIN_VALUE);
 				break;
 			case INT_GET_MAX_VALUE:
-				javaWriter.getStaticField(INTEGER_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.INTEGER_MAX_VALUE);
 				break;
 			case UINT_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -1875,10 +1751,10 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(-1);
 				break;
 			case LONG_GET_MIN_VALUE:
-				javaWriter.getStaticField(LONG_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.LONG_MIN_VALUE);
 				break;
 			case LONG_GET_MAX_VALUE:
-				javaWriter.getStaticField(LONG_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.LONG_MAX_VALUE);
 				break;
 			case ULONG_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -1890,28 +1766,28 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.iConst0();
 				break;
 			case USIZE_GET_MAX_VALUE:
-				javaWriter.getStaticField(INTEGER_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.INTEGER_MAX_VALUE);
 				break;
 			case USIZE_BITS:
 				javaWriter.constant(32);
 				break;
 			case FLOAT_GET_MIN_VALUE:
-				javaWriter.getStaticField(FLOAT_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.FLOAT_MIN_VALUE);
 				break;
 			case FLOAT_GET_MAX_VALUE:
-				javaWriter.getStaticField(FLOAT_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.FLOAT_MAX_VALUE);
 				break;
 			case DOUBLE_GET_MIN_VALUE:
-				javaWriter.getStaticField(DOUBLE_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.DOUBLE_MIN_VALUE);
 				break;
 			case DOUBLE_GET_MAX_VALUE:
-				javaWriter.getStaticField(DOUBLE_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.DOUBLE_MAX_VALUE);
 				break;
 			case CHAR_GET_MIN_VALUE:
-				javaWriter.getStaticField(CHARACTER_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.CHARACTER_MIN_VALUE);
 				break;
 			case CHAR_GET_MAX_VALUE:
-				javaWriter.getStaticField(CHARACTER_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.CHARACTER_MAX_VALUE);
 				break;
 			case ENUM_VALUES: {
 				DefinitionTypeID type = (DefinitionTypeID) ((ArrayTypeID) expression.type).elementType;
@@ -2277,102 +2153,102 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			case INT_HIGHEST_ONE_BIT:
 			case UINT_HIGHEST_ONE_BIT:
 			case USIZE_HIGHEST_ONE_BIT:
-				javaWriter.invokeStatic(INTEGER_HIGHEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_HIGHEST_ONE_BIT);
 				break;
 			case INT_LOWEST_ONE_BIT:
 			case UINT_LOWEST_ONE_BIT:
 			case USIZE_LOWEST_ONE_BIT:
-				javaWriter.invokeStatic(INTEGER_LOWEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_LOWEST_ONE_BIT);
 				break;
 			case INT_HIGHEST_ZERO_BIT:
 			case UINT_HIGHEST_ZERO_BIT:
 			case USIZE_HIGHEST_ZERO_BIT:
 				javaWriter.iNeg();
-				javaWriter.invokeStatic(INTEGER_HIGHEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_HIGHEST_ONE_BIT);
 				break;
 			case INT_LOWEST_ZERO_BIT:
 			case UINT_LOWEST_ZERO_BIT:
 			case USIZE_LOWEST_ZERO_BIT:
 				javaWriter.iNeg();
-				javaWriter.invokeStatic(INTEGER_LOWEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_LOWEST_ONE_BIT);
 				break;
 			case INT_BIT_COUNT:
 			case UINT_BIT_COUNT:
 			case USIZE_BIT_COUNT:
-				javaWriter.invokeStatic(INTEGER_BIT_COUNT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_BIT_COUNT);
 				break;
 			case LONG_HIGHEST_ONE_BIT:
 			case ULONG_HIGHEST_ONE_BIT:
-				javaWriter.invokeStatic(LONG_HIGHEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_HIGHEST_ONE_BIT);
 				break;
 			case LONG_LOWEST_ONE_BIT:
 			case ULONG_LOWEST_ONE_BIT:
-				javaWriter.invokeStatic(LONG_LOWEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_LOWEST_ONE_BIT);
 				break;
 			case LONG_HIGHEST_ZERO_BIT:
 			case ULONG_HIGHEST_ZERO_BIT:
 				javaWriter.lNeg();
-				javaWriter.invokeStatic(LONG_HIGHEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_HIGHEST_ONE_BIT);
 				break;
 			case LONG_LOWEST_ZERO_BIT:
 			case ULONG_LOWEST_ZERO_BIT:
 				javaWriter.lNeg();
-				javaWriter.invokeStatic(LONG_LOWEST_ONE_BIT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_LOWEST_ONE_BIT);
 				break;
 			case LONG_BIT_COUNT:
 			case ULONG_BIT_COUNT:
-				javaWriter.invokeStatic(LONG_BIT_COUNT);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_BIT_COUNT);
 				break;
 			case FLOAT_BITS:
-				javaWriter.invokeStatic(FLOAT_BITS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_BITS);
 				break;
 			case DOUBLE_BITS:
-				javaWriter.invokeStatic(DOUBLE_BITS);
+				javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_BITS);
 				break;
 			case STRING_LENGTH:
-				javaWriter.invokeVirtual(STRING_LENGTH);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_LENGTH);
 				break;
 			case STRING_CHARACTERS:
-				javaWriter.invokeVirtual(STRING_CHARACTERS);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_CHARACTERS);
 				break;
 			case STRING_ISEMPTY:
-				javaWriter.invokeVirtual(STRING_ISEMPTY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_ISEMPTY);
 				break;
 			case ASSOC_SIZE:
-				javaWriter.invokeVirtual(MAP_SIZE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_SIZE);
 				break;
 			case ASSOC_ISEMPTY:
-				javaWriter.invokeVirtual(MAP_ISEMPTY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_ISEMPTY);
 				break;
 			case ASSOC_KEYS: {
 				Type resultType = context.getType(expression.type);
 
-				javaWriter.invokeVirtual(MAP_KEYS);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_KEYS);
 				javaWriter.dup();
-				javaWriter.invokeVirtual(COLLECTION_SIZE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.COLLECTION_SIZE);
 				javaWriter.newArray(resultType);
-				javaWriter.invokeVirtual(COLLECTION_TOARRAY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.COLLECTION_TOARRAY);
 				javaWriter.checkCast(resultType);
 				break;
 			}
 			case ASSOC_VALUES: {
 				Type resultType = context.getType(expression.type);
 
-				javaWriter.invokeVirtual(MAP_VALUES);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.MAP_VALUES);
 				javaWriter.dup();
-				javaWriter.invokeVirtual(COLLECTION_SIZE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.COLLECTION_SIZE);
 				javaWriter.newArray(resultType);
-				javaWriter.invokeVirtual(COLLECTION_TOARRAY);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.COLLECTION_TOARRAY);
 				javaWriter.checkCast(resultType);
 				break;
 			}
 			case ASSOC_HASHCODE:
 				// TODO: we need a content-based hashcode
-				javaWriter.invokeVirtual(OBJECT_HASHCODE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_HASHCODE);
 				break;
 			case GENERICMAP_HASHCODE:
 				// TODO: we need a content-based hashcode
-				javaWriter.invokeVirtual(OBJECT_HASHCODE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_HASHCODE);
 				break;
 			case ARRAY_LENGTH:
 				javaWriter.arrayLength();
@@ -2382,38 +2258,38 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				if (type.elementType instanceof BasicTypeID) {
 					switch ((BasicTypeID) type.elementType) {
 						case BOOL:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_BOOLS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_BOOLS);
 							break;
 						case BYTE:
 						case SBYTE:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_BYTES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_BYTES);
 							break;
 						case SHORT:
 						case USHORT:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_SHORTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_SHORTS);
 							break;
 						case INT:
 						case UINT:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_INTS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_INTS);
 							break;
 						case LONG:
 						case ULONG:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_LONGS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_LONGS);
 							break;
 						case FLOAT:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_FLOATS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_FLOATS);
 							break;
 						case DOUBLE:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_DOUBLES);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_DOUBLES);
 							break;
 						case CHAR:
-							javaWriter.invokeStatic(ARRAYS_HASHCODE_CHARS);
+							javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_HASHCODE_CHARS);
 							break;
 						default:
 							throw new IllegalArgumentException("Unknown basic type: " + type.elementType);
 					}
 				} else {
-					javaWriter.invokeStatic(ARRAYS_DEEPHASHCODE);
+					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.ARRAYS_DEEPHASHCODE);
 				}
 				break;
 			}
@@ -2430,13 +2306,13 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.label(exit);
 				break;
 			case ENUM_NAME:
-				javaWriter.invokeVirtual(ENUM_NAME);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.ENUM_NAME);
 				break;
 			case ENUM_ORDINAL:
-				javaWriter.invokeVirtual(ENUM_ORDINAL);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.ENUM_ORDINAL);
 				break;
 			case OBJECT_HASHCODE:
-				javaWriter.invokeVirtual(OBJECT_HASHCODE);
+				javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_HASHCODE);
 				break;
 			case RANGE_FROM: {
 				RangeTypeID type = (RangeTypeID) expression.target.type;
@@ -2495,7 +2371,7 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 			type.keyType.accept(type.keyType, boxingTypeVisitor);
 			expression.values[i].accept(this);
 			type.valueType.accept(type.valueType, boxingTypeVisitor);
-			javaWriter.invokeInterface(MAP_PUT);
+			javaWriter.invokeInterface(JavaExpressionVisitorJavaMembers.MAP_PUT);
 			javaWriter.pop();
 		}
 		return null;
@@ -2511,7 +2387,7 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 
 		//TODO replace beforeSwitch visitor or similar
 		if (expression.value.type == BasicTypeID.STRING)
-			javaWriter.invokeVirtual(OBJECT_HASHCODE);
+			javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.OBJECT_HASHCODE);
 
 		//TODO replace with beforeSwitch visitor or similar
 		for (MatchExpression.Case aCase : expression.cases) {
@@ -2603,13 +2479,13 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.newObject(JavaClass.STRING);
 				javaWriter.dup();
 				expression.arguments.arguments[0].accept(this);
-				javaWriter.invokeSpecial(STRING_INIT_CHARACTERS);
+				javaWriter.invokeSpecial(JavaExpressionVisitorJavaMembers.STRING_INIT_CHARACTERS);
 				return;
 			case ASSOC_CONSTRUCTOR:
 			case GENERICMAP_CONSTRUCTOR: {
 				javaWriter.newObject(JavaClass.HASHMAP);
 				javaWriter.dup();
-				javaWriter.invokeSpecial(HASHMAP_INIT);
+				javaWriter.invokeSpecial(JavaExpressionVisitorJavaMembers.HASHMAP_INIT);
 				return;
 			}
 			case ARRAY_CONSTRUCTOR_SIZED:
@@ -3070,16 +2946,16 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(0xFF);
 				break;
 			case SBYTE_GET_MIN_VALUE:
-				javaWriter.getStaticField(BYTE_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.BYTE_MIN_VALUE);
 				break;
 			case SBYTE_GET_MAX_VALUE:
-				javaWriter.getStaticField(BYTE_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.BYTE_MAX_VALUE);
 				break;
 			case SHORT_GET_MIN_VALUE:
-				javaWriter.getStaticField(SHORT_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.SHORT_MIN_VALUE);
 				break;
 			case SHORT_GET_MAX_VALUE:
-				javaWriter.getStaticField(SHORT_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.SHORT_MAX_VALUE);
 				break;
 			case USHORT_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -3088,10 +2964,10 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(0xFFFF);
 				break;
 			case INT_GET_MIN_VALUE:
-				javaWriter.getStaticField(INTEGER_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.INTEGER_MIN_VALUE);
 				break;
 			case INT_GET_MAX_VALUE:
-				javaWriter.getStaticField(INTEGER_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.INTEGER_MAX_VALUE);
 				break;
 			case UINT_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -3100,10 +2976,10 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(-1);
 				break;
 			case LONG_GET_MIN_VALUE:
-				javaWriter.getStaticField(LONG_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.LONG_MIN_VALUE);
 				break;
 			case LONG_GET_MAX_VALUE:
-				javaWriter.getStaticField(LONG_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.LONG_MAX_VALUE);
 				break;
 			case ULONG_GET_MIN_VALUE:
 				javaWriter.iConst0();
@@ -3112,22 +2988,22 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 				javaWriter.constant(-1L);
 				break;
 			case FLOAT_GET_MIN_VALUE:
-				javaWriter.getStaticField(FLOAT_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.FLOAT_MIN_VALUE);
 				break;
 			case FLOAT_GET_MAX_VALUE:
-				javaWriter.getStaticField(FLOAT_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.FLOAT_MAX_VALUE);
 				break;
 			case DOUBLE_GET_MIN_VALUE:
-				javaWriter.getStaticField(DOUBLE_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.DOUBLE_MIN_VALUE);
 				break;
 			case DOUBLE_GET_MAX_VALUE:
-				javaWriter.getStaticField(DOUBLE_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.DOUBLE_MAX_VALUE);
 				break;
 			case CHAR_GET_MIN_VALUE:
-				javaWriter.getStaticField(CHARACTER_MIN_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.CHARACTER_MIN_VALUE);
 				break;
 			case CHAR_GET_MAX_VALUE:
-				javaWriter.getStaticField(CHARACTER_MAX_VALUE);
+				javaWriter.getStaticField(JavaExpressionVisitorJavaMembers.CHARACTER_MAX_VALUE);
 				break;
 			case ENUM_VALUES: {
 				DefinitionTypeID type = (DefinitionTypeID) ((ArrayTypeID) expression.type).elementType;
