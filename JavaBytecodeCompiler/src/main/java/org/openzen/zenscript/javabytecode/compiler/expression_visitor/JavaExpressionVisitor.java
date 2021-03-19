@@ -21,6 +21,7 @@ import org.openzen.zenscript.javabytecode.JavaBytecodeContext;
 import org.openzen.zenscript.javabytecode.JavaLocalVariableInfo;
 import org.openzen.zenscript.javabytecode.compiler.*;
 import org.openzen.zenscript.javabytecode.compiler.JavaModificationExpressionVisitor.PushOption;
+import org.openzen.zenscript.javabytecode.compiler.expression_visitor.handlers.CompareHandler;
 import org.openzen.zenscript.javashared.*;
 import org.openzen.zenscript.javashared.expressions.JavaFunctionInterfaceCastExpression;
 import org.openzen.zenscript.javashared.types.JavaFunctionalInterfaceTypeID;
@@ -117,172 +118,8 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 
 	@Override
 	public Void visitCompare(CompareExpression expression) {
-		if (expression.operator.getBuiltin() != null) {
-			switch (expression.operator.getBuiltin()) {
-				case BYTE_COMPARE:
-					expression.left.accept(this);
-					javaWriter.constant(0xFF);
-					javaWriter.iAnd();
-					expression.right.accept(this);
-					javaWriter.constant(0xFF);
-					javaWriter.iAnd();
-					compareInt(expression.comparison);
-					break;
-				case USHORT_COMPARE:
-					expression.left.accept(this);
-					javaWriter.constant(0xFFFF);
-					javaWriter.iAnd();
-					expression.right.accept(this);
-					javaWriter.constant(0xFFFF);
-					javaWriter.iAnd();
-					compareInt(expression.comparison);
-					break;
-				case SBYTE_COMPARE:
-				case SHORT_COMPARE:
-				case INT_COMPARE:
-				case CHAR_COMPARE:
-				case USIZE_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					compareInt(expression.comparison);
-					break;
-				case UINT_COMPARE:
-				case USIZE_COMPARE_UINT:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.INTEGER_COMPARE_UNSIGNED);
-					compareGeneric(expression.comparison);
-					break;
-				case LONG_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE);
-					compareGeneric(expression.comparison);
-					break;
-				case ULONG_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
-					compareGeneric(expression.comparison);
-					break;
-				case ULONG_COMPARE_UINT:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.i2l();
-					javaWriter.constant(0xFFFF_FFFFL);
-					javaWriter.lAnd();
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
-					compareGeneric(expression.comparison);
-					break;
-				case ULONG_COMPARE_USIZE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.i2l();
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.LONG_COMPARE_UNSIGNED);
-					compareGeneric(expression.comparison);
-					break;
-				case FLOAT_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.FLOAT_COMPARE);
-					compareGeneric(expression.comparison);
-					break;
-				case DOUBLE_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeStatic(JavaExpressionVisitorJavaMembers.DOUBLE_COMPARE);
-					compareGeneric(expression.comparison);
-					break;
-				case STRING_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.STRING_COMPARETO);
-					compareGeneric(expression.comparison);
-					break;
-				case ENUM_COMPARE:
-					expression.left.accept(this);
-					expression.right.accept(this);
-					javaWriter.invokeVirtual(JavaExpressionVisitorJavaMembers.ENUM_COMPARETO);
-					compareGeneric(expression.comparison);
-					break;
-				default:
-					throw new UnsupportedOperationException("Unknown builtin comparator: " + expression.operator.getBuiltin());
-			}
-		} else {
-			expression.left.accept(this);
-			expression.right.accept(this);
-
-			if (!checkAndExecuteMethodInfo(expression.operator, expression.type, expression))
-				throw new IllegalStateException("Call target has no method info!");
-
-			compareGeneric(expression.comparison);
-		}
-
+		new CompareHandler(this).visitCompare(expression);
 		return null;
-	}
-
-	private void compareInt(CompareType comparator) {
-		Label exit = new Label();
-		Label isTrue = new Label();
-		switch (comparator) {
-			case EQ:
-				javaWriter.ifICmpEQ(isTrue);
-				break;
-			case NE:
-				javaWriter.ifICmpNE(isTrue);
-				break;
-			case GT:
-				javaWriter.ifICmpGT(isTrue);
-				break;
-			case GE:
-				javaWriter.ifICmpGE(isTrue);
-				break;
-			case LT:
-				javaWriter.ifICmpLT(isTrue);
-				break;
-			case LE:
-				javaWriter.ifICmpLE(isTrue);
-				break;
-			default:
-				throw new IllegalStateException("Invalid comparator: " + comparator);
-		}
-		javaWriter.iConst0();
-		javaWriter.goTo(exit);
-		javaWriter.label(isTrue);
-		javaWriter.iConst1();
-		javaWriter.label(exit);
-	}
-
-	private void compareGeneric(CompareType comparator) {
-		Label exit = new Label();
-		Label isTrue = new Label();
-		switch (comparator) {
-			case EQ:
-				javaWriter.ifEQ(isTrue);
-				break;
-			case NE:
-				javaWriter.ifNE(isTrue);
-				break;
-			case GT:
-				javaWriter.ifGT(isTrue);
-				break;
-			case GE:
-				javaWriter.ifGE(isTrue);
-				break;
-			case LT:
-				javaWriter.ifLT(isTrue);
-				break;
-			case LE:
-				javaWriter.ifLE(isTrue);
-				break;
-			default:
-				throw new IllegalStateException("Invalid comparator: " + comparator);
-		}
-		javaWriter.iConst0();
-		javaWriter.goTo(exit);
-		javaWriter.label(isTrue);
-		javaWriter.iConst1();
-		javaWriter.label(exit);
 	}
 
 	@Override
@@ -3244,7 +3081,7 @@ public class JavaExpressionVisitor implements ExpressionVisitor<Void>, JavaNativ
 
 	//Will return true if a JavaMethodInfo.class tag exists, and will compile that tag
 	@SuppressWarnings({"Raw", "unchecked"})
-	boolean checkAndExecuteMethodInfo(DefinitionMemberRef member, TypeID resultType, Expression expression) {
+	public boolean checkAndExecuteMethodInfo(DefinitionMemberRef member, TypeID resultType, Expression expression) {
 		JavaMethod methodInfo = context.getJavaMethod(member);
 		if (methodInfo == null)
 			return false;
