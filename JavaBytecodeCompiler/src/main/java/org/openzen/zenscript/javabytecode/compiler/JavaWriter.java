@@ -36,7 +36,7 @@ public class JavaWriter {
 	private final Map<VariableID, JavaLocalVariableInfo> localVariables = new HashMap<>();
 	private final List<Integer> lineNumberLabels = new ArrayList<>();
 	private boolean debug = false;
-	private boolean nameVariables;
+	private final boolean nameVariables;
 	private int labelIndex = 1;
 	private Map<Label, String> labelNames = new HashMap<>();
 
@@ -1034,6 +1034,36 @@ public class JavaWriter {
 			logger.debug("ifACmpNE " + getLabelName(lbl));
 
 		visitor.visitJumpInsn(IF_ACMPNE, lbl);
+	}
+
+	public void objectsSame() {
+		if (debug)
+			logger.debug("Comparing Objects on stack for equality");
+
+		final Label exit = new Label();
+		final Label whenSame = new Label();
+
+		ifACmpEq(whenSame);
+		iConst0();
+		goTo(exit);
+		label(whenSame);
+		iConst1();
+		label(exit);
+	}
+
+	public void objectsNotSame() {
+		if (debug)
+			logger.debug("Comparing Objects on stack for inequality");
+
+		final Label exit = new Label();
+		final Label whenDifferent = new Label();
+
+		ifACmpNe(whenDifferent);
+		iConst0();
+		goTo(exit);
+		label(whenDifferent);
+		iConst1();
+		label(exit);
 	}
 
 	public void ifNull(Label lbl) {
