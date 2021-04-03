@@ -38,4 +38,28 @@ public class ZSToken implements Token<ZSTokenType> {
 				ZSTokenType.INVALID,
 				content.substring(0, offset) + value + content.substring(offset));
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		ZSToken zsToken = (ZSToken) o;
+
+		if (type != zsToken.type) {
+			return false;
+		}
+		return content.equals(zsToken.content);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = type.hashCode();
+		result = 31 * result + content.hashCode();
+		return result;
+	}
 }
