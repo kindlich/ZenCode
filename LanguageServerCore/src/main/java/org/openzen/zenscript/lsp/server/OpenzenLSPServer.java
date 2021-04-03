@@ -17,15 +17,19 @@ public class OpenzenLSPServer implements LanguageServer, LanguageClientAware {
 
 	public OpenzenLSPServer() {
 		this.semanticTokenProvider = new LSPSemanticTokenProvider();
-		this.textDocumentService = new OpenzenTextDocumentService(semanticTokenProvider);
+		this.textDocumentService = new OpenzenTextDocumentService(semanticTokenProvider, this);
 		this.workspaceService = new OpenzenWorkspaceService();
 	}
 
 	@Override
-	@SuppressWarnings("UnstableApiUsage")
 	public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
 		return CompletableFuture.supplyAsync(() -> {
 			final ServerCapabilities serverCapabilities = new ServerCapabilities();
+			final WorkspaceFoldersOptions workspaceFoldersOptions = new WorkspaceFoldersOptions();
+			workspaceFoldersOptions.setChangeNotifications(true);
+			final WorkspaceServerCapabilities workspaceServerCapabilities = new WorkspaceServerCapabilities(workspaceFoldersOptions);
+			serverCapabilities.setWorkspace(workspaceServerCapabilities);
+
 			serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
 			serverCapabilities.setCompletionProvider(new CompletionOptions());
 			serverCapabilities.setSemanticTokensProvider(semanticTokenProvider.getOptions());

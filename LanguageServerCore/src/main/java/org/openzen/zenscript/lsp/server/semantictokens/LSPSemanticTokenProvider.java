@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("UnstableApiUsage")
 public class LSPSemanticTokenProvider {
 
 	public CompletableFuture<SemanticTokens> tokensFull(SemanticTokensParams params) {
